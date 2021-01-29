@@ -1,9 +1,9 @@
 # MLMLM
 MLMLM: Link Prediction with Mean Likelihood Masked Language Model
 
-|  Paper   | Note  |
-|  ----  | ----  |
-| [MLMLM: Link Prediction with Mean Likelihood Masked Language Model](https://arxiv.org/pdf/2009.07058v1.pdf)  | []() |
+|  Paper   | Official code  | Note  |
+|  ----  | ----  | ----  |
+| [MLMLM: Link Prediction with Mean Likelihood Masked Language Model](https://arxiv.org/pdf/2009.07058v1.pdf)  | [Code](https://github.com/LuEE-C/MLMLM) | []() |
 
 # Environment
 python3.74 <br/>
