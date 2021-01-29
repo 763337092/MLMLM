@@ -7,11 +7,11 @@ MLMLM: Link Prediction with Mean Likelihood Masked Language Model
 
 # Environment
 python3.74 <br/>
-pytorch>=1.3.1
-transformers==2.8.0
-numpy
-pandas
-tqdm
+pytorch>=1.3.1 <br/>
+transformers==2.8.0 <br/>
+numpy <br/>
+pandas <br/>
+tqdm <br/>
 
 # How to run
 1. download ```bert-base-uncased``` weights from https://huggingface.co/bert-base-uncased/tree/main to ./pretrained/bert-base-uncased/
