@@ -117,7 +117,7 @@ def make_infer_dataset(df, tokenizer, max_ent_length, max_seq_length):
                                len(entity1_idx) + len(desc1_idx) + len(relation_idx) + 1 - overflow_length + len(mask_idx)])
 
         ## right predict left
-        inputs_ids_2 = [tokenizer.cls_token_id] + mask_idx + relation_idx + entity2_idx +  + [tokenizer.sep_token_id]
+        inputs_ids_2 = [tokenizer.cls_token_id] + mask_idx + relation_idx + entity2_idx + desc2_idx + [tokenizer.sep_token_id]
         padding_length = max(0, max_seq_length - len(inputs_ids_2))
         inputs_ids_2 = inputs_ids_2 + ([tokenizer.pad_token_id] * padding_length)
         inputs_ids_2 = inputs_ids_2[:max_seq_length]
