@@ -30,12 +30,12 @@ if DEBUG:
 
 MAX_ENTITY_LENGTH = 24
 MAX_SEQUENCE_LENGTH = 64
-BATCH_SIZE = 64
-WEIGHT_DECAY = 1e-5
+BATCH_SIZE = 32
+WEIGHT_DECAY = 0.1
 WARMUP_RATIO = 0.
-LEARNING_RATE = 1e-5
+LEARNING_RATE = 2e-5
 N_GPU = 1
-EPOCHS = 30
+EPOCHS = 25
 GRAD_NORM = 1.0
 EARLYSTOP_NUM = 3
 
@@ -48,8 +48,8 @@ def trim_tensor(input_ids, label_ids, tokenizer):
 def train_fn(model, tokenizer, optimizer, scheduler, global_steps, train_loader):
     model.train()
     train_loss = []
-    # for (input_ids, label_ids) in tqdm(train_loader, desc='Train'):
-    for (input_ids, label_ids) in train_loader:
+    for (input_ids, label_ids) in tqdm(train_loader, desc='Train'):
+    # for (input_ids, label_ids) in train_loader:
         input_ids, label_ids = trim_tensor(input_ids, label_ids, tokenizer)
         input_ids, label_ids = input_ids.to(device), label_ids.to(device)
 
@@ -75,8 +75,8 @@ def train_fn(model, tokenizer, optimizer, scheduler, global_steps, train_loader)
 def inference_fn(model, tokenizer, data_loader):
     model.eval()
     topk_entity_list = []
-    # for (input_ids, label_ids, start_end_idxs) in tqdm(data_loader, desc='Infer'):
-    for (input_ids, label_ids, start_end_idxs) in data_loader:
+    for (input_ids, label_ids, start_end_idxs) in tqdm(data_loader, desc='Infer'):
+    # for (input_ids, label_ids, start_end_idxs) in data_loader:
         input_ids, label_ids = trim_tensor(input_ids, label_ids, tokenizer)
         input_ids, label_ids = input_ids.to(device), label_ids.to(device)
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     print(f'All entities num: {len(all_entities)}')
     id2entity = {idx: entity for idx, entity in enumerate(all_entities)}
     entity2token_id = {entity: tokenizer.encode_plus(str(entity), add_special_tokens=False)['input_ids'] for entity in
-                       all_entities}
+                       tqdm(all_entities, desc='Making entity tokens')}
 
     ## Make Datasets
     train_dateset = make_train_dataset(
