@@ -3,7 +3,7 @@ MLMLM: Link Prediction with Mean Likelihood Masked Language Model
 
 |  Paper   | Official code  | Note  |
 |  ----  | ----  | ----  |
-| [MLMLM: Link Prediction with Mean Likelihood Masked Language Model](https://arxiv.org/pdf/2009.07058v1.pdf)  | [Code](https://github.com/LuEE-C/MLMLM) | []() |
+| [MLMLM: Link Prediction with Mean Likelihood Masked Language Model](https://arxiv.org/pdf/2009.07058v1.pdf)  | [Code](https://github.com/LuEE-C/MLMLM) | [Note](https://zhuanlan.zhihu.com/p/348097445) |
 
 # Environment
 python3.74 <br/>
