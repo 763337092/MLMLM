@@ -37,7 +37,7 @@ LEARNING_RATE = 2e-5
 N_GPU = 1
 EPOCHS = 25
 GRAD_NORM = 1.0
-EARLYSTOP_NUM = 3
+EARLYSTOP_NUM = 5
 
 def trim_tensor(input_ids, label_ids, tokenizer):
     max_len = torch.max(torch.sum((input_ids != tokenizer.pad_token_id), -1))
@@ -100,7 +100,7 @@ def inference_fn(model, tokenizer, data_loader):
                 _entity_prob = preds[np.arange(len(_entity_token_id)), _entity_token_id]
                 # print('_entity_prob: ', _entity_prob)
                 entity_prob_list.append(np.mean(_entity_prob))
-            topk_entity_idx = np.argsort(entity_prob_list)[::-1][:10]
+            topk_entity_idx = np.argsort(entity_prob_list)[::-1]#[:10]
             topk_entity = [id2entity[_id] for _id in topk_entity_idx]
             topk_entity_list.append(topk_entity)
 
@@ -115,7 +115,11 @@ if __name__ == '__main__':
     tokenizer = BertTokenizer.from_pretrained(f'{PRETRAINED_MODEL_PATH}/vocab.txt')
 
     ## Process entities
-    all_entities = list(set(train.entity1.unique().tolist() + train.entity2.unique().tolist()))
+    all_entities = list(set(
+        train.entity1.unique().tolist() + train.entity2.unique().tolist() + 
+        valid.entity1.unique().tolist() + valid.entity2.unique().tolist() + 
+        test.entity1.unique().tolist() + test.entity2.unique().tolist()
+        ))
     print(f'All entities num: {len(all_entities)}')
     id2entity = {idx: entity for idx, entity in enumerate(all_entities)}
     entity2token_id = {entity: tokenizer.encode_plus(str(entity), add_special_tokens=False)['input_ids'] for entity in
@@ -180,14 +184,14 @@ if __name__ == '__main__':
         top10_val_pred = inference_fn(model, tokenizer, valid_loader)
         top10_test_pred = inference_fn(model, tokenizer, test_loader)
 
-        valid_hits1, valid_hits3, valid_hits10 = eval_fn(valid[['entity1', 'entity2']].values.flatten(), top10_val_pred)
-        test_hits1, test_hits3, test_hits10 = eval_fn(test[['entity1', 'entity2']].values.flatten(), top10_test_pred)
+        valid_hits1, valid_hits3, valid_hits10, valid_MR, valid_MRR = eval_fn(valid[['entity1', 'entity2']].values.flatten(), top10_val_pred)
+        test_hits1, test_hits3, test_hits10, test_MR, test_MRR = eval_fn(test[['entity1', 'entity2']].values.flatten(), top10_test_pred)
         print(
-            f'Epoch{ep:3}: valid_hits@1={valid_hits1:.4f} valid_hits@3={valid_hits3:.4f} valid_hits@10={valid_hits10:.4f} '
-            f'test_hits@1={test_hits1:.4f} test_hits@3={test_hits3:.4f} test_hits@10={test_hits10:.4f} '
+                f'Epoch{ep:3}: valid_hits@1={valid_hits1:.4f} valid_hits@3={valid_hits3:.4f} valid_hits@10={valid_hits10:.4f} valid_MR={valid_MR:.4f} valid_MRR={valid_MRR:.4f} '
+                f'test_hits@1={test_hits1:.4f} test_hits@3={test_hits3:.4f} test_hits@10={test_hits10:.4f} test_MR={test_MR:.4f} test_MRR={test_MRR:.4f} '
             f'Time={(time.time()-start_time) / 60:.2f}min')
 
-        es(valid_hits1, model, model_path=model_weights)
+        es(valid_hits10, model, model_path=model_weights)
         if es.early_stop:
             print("Early stopping")
             break

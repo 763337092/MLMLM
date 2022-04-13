@@ -66,4 +66,6 @@ def eval_fn(target, pred_top10):
     hits1 = float(len(index_list[index_list < 1])) / len(index_list)
     hits3 = float(len(index_list[index_list < 3])) / len(index_list)
     hits10 = float(len(index_list[index_list < 10])) / len(index_list)
-    return hits1, hits3, hits10
+    MR = np.mean(index_list)+1
+    MRR = np.mean([1 / (x+1) for x in index_list])
+    return hits1, hits3, hits10, MR, MRR

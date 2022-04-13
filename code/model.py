@@ -4,8 +4,9 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 
 from transformers import BertTokenizer, BertConfig, BertPreTrainedModel, BertModel, get_linear_schedule_with_warmup, AdamW
-from transformers.modeling_bert import BertLayerNorm
+#from transformers.modeling_bert import BertLayerNorm
 
+BertLayerNorm = torch.nn.LayerNorm
 def gelu(x):
     """ Original Implementation of the gelu activation function in Google Bert repo when initially created.
         For information: OpenAI GPT's gelu is slightly different (and gives slightly different results):
